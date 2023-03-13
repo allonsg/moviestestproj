@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { FC } from 'react'
-import { Styled404 } from './Styled404' 
 import MainContainer from '@/components/MainContainer'
+import { Styled404 } from '@/components/Styled404/indext'
 
 const Custom404: FC = () => {
 

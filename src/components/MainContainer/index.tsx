@@ -8,7 +8,6 @@ interface IProps{
     description: string;
     title: string;
     children: ReactNode | ReactElement;
-    canonical?: string;
 }
 
 interface ILink{
@@ -17,7 +16,7 @@ interface ILink{
     path: string;
 }
 
-const THIS_URL = 'http://localhost:3000';
+// const THIS_URL = 'http://localhost:3000';
 
 const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple service for movies', title = 'Movies | Home', children }) => {
     const { pathname } = useRouter();
@@ -27,7 +26,6 @@ const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple 
             { id: 1, pageTitle: 'Movies', path: '/' },
             { id: 2, pageTitle: 'Favorite', path: '/favoritemovies' },
         ]
-    
 
     return (
         <>
@@ -37,7 +35,7 @@ const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple 
                 <meta name="description" content={description} />
                 <meta name="robots" content="index, follow"/>
                 <meta charSet="utf-8" />
-                <link rel="canonical" href={`${THIS_URL+pathname}`} />
+                {/* <link rel="canonical" href={`${THIS_URL+pathname}`} /> */}
             </Head>
 
             <StyledHeader>
