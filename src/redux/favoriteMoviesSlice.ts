@@ -1,4 +1,5 @@
 import getLocal from '@/services/localStorage/getLocal';
+import setLocal from '@/services/localStorage/setLocal';
 import { Movie } from '@/types/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from './store';
@@ -9,11 +10,15 @@ export interface FavoritesMoviesState {
 
 const getInitialState = (): FavoritesMoviesState => {
   const favoritesMoviesArr = getLocal({item: 'favoritesMovies', type: '[]'});
-
-  return favoritesMoviesArr? { movies: favoritesMoviesArr } : { movies: [] }
+  
+  return !!favoritesMoviesArr? { movies: favoritesMoviesArr } : { movies: [] }
 };
 
-const initialState: FavoritesMoviesState = getInitialState();
+const localFavs: FavoritesMoviesState = getInitialState();
+
+const initialState: FavoritesMoviesState = {
+  movies: [...localFavs.movies]
+}
 
 const favoritesMoviesSlice = createSlice({
   name: 'favoritesMovies',
@@ -21,11 +26,11 @@ const favoritesMoviesSlice = createSlice({
   reducers: {
     addFavorite: (state, { payload }: PayloadAction<Movie>) => {
       state.movies.push(payload);
-      window.localStorage.setItem('favoritesMovies', JSON.stringify(state.movies));
+      setLocal({item:'favoritesMovies', type: state.movies})
     },
     removeFavorite: (state, { payload }: PayloadAction<Movie>) => {
       state.movies = state.movies.filter(movie => movie.imdbID !== payload.imdbID);
-      window.localStorage.setItem('favoritesMovies', JSON.stringify(state.movies));
+      setLocal({ item: 'favoritesMovies', type: state.movies })
     },
   },
 });

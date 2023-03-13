@@ -9,6 +9,7 @@ export const fetchMovies = createAsyncThunk<SearchResult, SearchParams>(
   async (params) => {
     try {
       const result = await searchMovies({ searchQuery: params.searchQuery, page: params.page, type: params.type });
+      console.log({params, result})
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {

@@ -1,5 +1,3 @@
-//* wortking but without all task requirements
-
 import FavoriteButton from '../FavoriteButton';
 import { Movie } from '@/types/types';
 import { StyledMovieInfo, StyledMovieListItem, StyledMoviePoster, StyledMovieTitle } from './MovieListItem.styled';

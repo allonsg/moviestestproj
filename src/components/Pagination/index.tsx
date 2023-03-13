@@ -1,5 +1,4 @@
 import { FC, useState, useEffect } from 'react';
-import styled from '@emotion/styled';
 import { Container, PageLink } from './Pagination.styled';
 
 interface Props {

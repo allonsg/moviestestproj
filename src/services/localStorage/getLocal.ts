@@ -3,14 +3,14 @@ import setLocal from "./setLocal";
 
 const getLocal = ({ item, type }: LocalInfo) => {
     if (typeof window === 'undefined') {
-        return null;
+        return '';
     }
 
     const localInfo = window.localStorage.getItem(item);
 
     if (!localInfo) {
         setLocal({ item, type })
-        return null;
+        return '';
     }
     
     return JSON.parse(localInfo);

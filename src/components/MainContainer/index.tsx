@@ -16,21 +16,19 @@ interface ILink{
     path: string;
 }
 
-// const THIS_URL = 'http://localhost:3000';
+//! const THIS_URL = 'http://localhost:3000';
 
-const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple service for movies', title = 'Movies | Home', children }) => {
+const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple service for movies', children }) => {
     const { pathname } = useRouter();
 
     const navigation: ILink[] =
         [
             { id: 1, pageTitle: 'Movies', path: '/' },
-            { id: 2, pageTitle: 'Favorite', path: '/favoritemovies' },
         ]
-
     return (
         <>
             <Head>
-                <title> {title} </title>
+                <title>Movies</title>
                 <meta name="keywords" content={keywords} />
                 <meta name="description" content={description} />
                 <meta name="robots" content="index, follow"/>

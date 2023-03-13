@@ -63,7 +63,7 @@ export interface SearchParams {
 
 export type LocalInfo = {
     item: string;
-    type: string;
+    type: string | Movie[];
 }
 
 // 

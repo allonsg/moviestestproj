@@ -19,12 +19,6 @@ margin: 2rem;
 `;
 
 const MoviePage = ({ movie }: MoviePageProps) => {
-  //! ДОБАВИТЬ ВО ВСЕ КОМПОНЕНТЫ => (return <div>Loading...</div>; )
-  const router = useRouter();
-
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <MainContainer title={`Movie | ${movie.Title}`} keywords="films" description="simple service for films" >
