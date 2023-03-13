@@ -13,7 +13,6 @@ import { Movie } from '@/types/types';
 import { searchMovies } from '@/services/api';
 import { randomMovie } from '@/services/randomMovie';
 import { wrapper } from '@/redux/store';
-import ErrorMessage from '@/components/ErrorMessage';
 
 const Container = styled.div`
   padding: 10px;
@@ -44,34 +43,28 @@ const IndexPage: FC<Props> = ({ movies }) => {
   
   const handleSearch = async (value: string, type?: string) => {
      
-    dispatch(fetchMovies({ searchQuery: value, page: currentPage, type }));
-  };
+      dispatch(fetchMovies({searchQuery: value, page: currentPage, type}));
+   };
   
   const handlePageChange = (pageNumber: number) => {
     dispatch(setCurrentPage(pageNumber));
     dispatch(fetchMovies({ searchQuery, page: pageNumber, type: currentType }));
   };
   
-  const movieCondition = searchedMovies?.length > 0 ? searchedMovies : movies;
+  const movieCondition = searchedMovies.length > 0 ? searchedMovies : movies;
 
   return (
     <>
       <MainContainer title='Films | Home' keywords='films' description='simple service for films'>
         <Container>
 
-          <SearchBar onSearch={handleSearch} />
-          {searchedMovies &&
-            <>
-              <MovieList movies={movieCondition} />
-              <Pagination
-                currentPage={currentPage}
-                totalResults={resultCount}
-                onPageChange={handlePageChange}
-              />
-            </>
-          }
-
-          {!searchedMovies && <ErrorMessage/>}
+        <SearchBar onSearch={handleSearch} />
+          <MovieList movies={movieCondition} />
+          <Pagination
+            currentPage={currentPage}
+            totalResults={resultCount}
+            onPageChange={handlePageChange}
+          />
         </Container>
       </MainContainer>
     </>
@@ -82,6 +75,7 @@ let cachedMovie: string;
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
   const someMovie = cachedMovie || randomMovie();
+  // const state = store.getState();
 
   const {totalResults,Search} = await searchMovies({ searchQuery: someMovie, page: 1 });
   
