@@ -3,12 +3,11 @@ import { API_KEY } from './constants';
 import { Movie, SearchParams, SearchResult } from '@/types/types';
 
 
-const BASE_URL: string = `http://www.omdbapi.com/?apikey=${API_KEY}`;
+const BASE_URL: string = `https://www.omdbapi.com/?apikey=${API_KEY}`;
 
 
 
 export const searchMovies = async ({ searchQuery, page = 1, type }: SearchParams): Promise<SearchResult> => {
-  // const url = `${BASE_URL}&s=${searchQuery}&page=${page}&type=${type}`;
   const url = `${BASE_URL}&s=${searchQuery}&page=${page}${type? `&type=${type}`: ''}`;
   if (!searchQuery) {
     return {
