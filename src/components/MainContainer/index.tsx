@@ -20,7 +20,7 @@ interface ILink{
 
  const THIS_URL = 'https://moviestestproj.vercel.app';
 
-const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple service for movies', children }) => {
+const MainContainer: FC<IProps> = ({ title= 'Movies', keywords = 'movies', description = 'simple service for movies', children }) => {
     const { pathname } = useRouter();
 
     const navigation: ILink[] =
@@ -31,7 +31,7 @@ const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple 
     return (
         <>
             <Head>
-                <title>Movies</title>
+                <title>{title}</title>
                 <meta name="keywords" content={keywords} />
                 <meta name="description" content={description} />
                 <meta name="robots" content="index, follow"/>

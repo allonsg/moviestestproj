@@ -16,10 +16,14 @@ export const StyledMoviePage = styled.div`
   margin: 2rem;
 `;
 
-const MoviePage = ({ movie }: MoviePageProps) => {
 
+const MoviePage = ({ movie }: MoviePageProps) => {
+  
+const keywords: string = "Movies, Film, Search, English, Genre, Rating, Actors, Directors, Release date, Plot, User ratings, New releases";
+const description = "Get all the information you need on your favorite movies. From plot summaries to cast information, our film pages have it all."
+  
   return (
-    <MainContainer title={`Movie | ${movie.Title}`} keywords="films" description="simple service for films" >
+    <MainContainer title={`Movie | ${movie.Title}`} keywords={keywords} description={description} >
       <StyledMoviePage>
         <MovieDetails movie={movie} />
       </StyledMoviePage>

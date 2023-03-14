@@ -21,6 +21,7 @@ export const BackLink = styled(Link)<ILink>`
 `;
 
 export const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,9 +45,9 @@ export const Title = styled.h1`
 `;
 
 export const Poster = styled(Image)`
-  width: 100%;
   margin-bottom: 2rem;
 `;
+
 
 export const InfoTable = styled.table`
   border-collapse: collapse;

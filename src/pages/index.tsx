@@ -42,10 +42,11 @@ const IndexPage: FC<Props> = ({ movies }) => {
   setSearchParams({ page: currentPage || '', type: currentType, searchQuery });
   
   const movieCondition = searchedMovies?.length > 0 ? searchedMovies : movies;
-
+  const keywords = "Movies, Film, Search, English, Rating, Release date, New releases";
+  const description = "Discover your next favorite movie. Find ratings, reviews, trailers and more with our comprehensive film search engine."
   return (
     <>
-      <MainContainer title='Films | Home' keywords='films' description='simple service for films'>
+      <MainContainer title='Movies | Home' keywords={keywords} description={description}>
         <Heading fontSize="3rem" fontWeight={700}>
           Movies
         </Heading>

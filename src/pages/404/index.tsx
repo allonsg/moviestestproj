@@ -6,7 +6,7 @@ import { Styled404 } from '@/components/Styled404/indext'
 const Custom404: FC = () => {
 
     return (
-        <MainContainer title='ERROR 404' keywords='films' description='simple service for films'>
+        <MainContainer title='ERROR 404' keywords='Movies' description='Movies service'>
             <Styled404>
                 <div>
                     <h1>404</h1>

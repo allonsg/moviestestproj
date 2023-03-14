@@ -12,15 +12,18 @@ interface Props {
 }
 
 const FavMovies: FC<Props> = ({ movies }) => {
+const keywords: string = "Movies, Film, Search, English, Rating, Release date, New releases";
+const description = "Keep track of your favorite films. Our website allows you to save and organize your top picks for easy access and future viewing."
 
   return (
     <>
-      <MainContainer title='Films | Home' keywords='films' description='simple service for films'>
+      <MainContainer title='Movies | Favorites' keywords={keywords} description={description}>
          <Heading fontSize="3rem" fontWeight={700}>
           Favorite movies
         </Heading>
         <Container>
-          {movies.length > 0 ?  <MovieList movies={movies} /> : <ErrorMessage/>}
+          {(movies && movies.length> 0) && <MovieList movies={movies} />}
+          {(!movies || movies.length === 0 ) && <ErrorMessage />}
         </Container>
       </MainContainer>
     </>
@@ -43,7 +46,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async cont
 
     return {
       props: {
-        movies: res,
+        movies: res === '[]'? [] : res,
       },
     };
   } catch (err) {
