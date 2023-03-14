@@ -1,7 +1,9 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React, { FC, ReactElement, ReactNode } from 'react';
-import { StyledMain, StyledHeader, StyledNavLink } from './MainContainer.styled';
+import NavLink from '../NavLink';
+import { useRouter } from 'next/router';
+
+import { StyledMain, StyledHeader, StyledNav } from './MainContainer.styled';
 
 interface IProps{
     keywords: string;
@@ -16,7 +18,7 @@ interface ILink{
     path: string;
 }
 
-//! const THIS_URL = 'http://localhost:3000';
+ const THIS_URL = 'https://moviestestproj.vercel.app';
 
 const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple service for movies', children }) => {
     const { pathname } = useRouter();
@@ -24,6 +26,7 @@ const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple 
     const navigation: ILink[] =
         [
             { id: 1, pageTitle: 'Movies', path: '/' },
+            { id: 2, pageTitle: 'Favorite', path: '/favoriteMovies' },
         ]
     return (
         <>
@@ -33,13 +36,13 @@ const MainContainer: FC<IProps> = ({ keywords = 'movies', description = 'simple 
                 <meta name="description" content={description} />
                 <meta name="robots" content="index, follow"/>
                 <meta charSet="utf-8" />
-                {/* <link rel="canonical" href={`${THIS_URL+pathname}`} /> */}
+                <link rel="canonical" href={`${THIS_URL + pathname}`} />
             </Head>
 
             <StyledHeader>
-                <nav>
-                    {navigation.map(({ id, pageTitle, path }) => <StyledNavLink key={id} aria-disabled={pathname === path} className={pathname === path ? 'active' : ''} href={path}>{pageTitle}</StyledNavLink>)}
-                </nav>
+                <StyledNav>
+                    {navigation.map(({ id, pageTitle, path }) => <NavLink key={id} path={path}>{pageTitle}</NavLink>)}
+                </StyledNav>
             </StyledHeader>
 
             <StyledMain>{children}</StyledMain>

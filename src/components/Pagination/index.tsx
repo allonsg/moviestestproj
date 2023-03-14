@@ -1,5 +1,7 @@
-import { FC, useState, useEffect } from 'react';
+
+import React, { FC, useState, useEffect } from 'react';
 import { Container, PageLink } from './Pagination.styled';
+import { useMediaQuery } from 'react-responsive';
 
 interface Props {
   currentPage: number;
@@ -10,7 +12,9 @@ interface Props {
 const Pagination: FC<Props> = ({ currentPage, totalResults, onPageChange }) => {
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
   const totalPages = Math.ceil(totalResults / 10);
-  const maxVisiblePages = 10;
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+  const isTablet = useMediaQuery({ query: '(min-width: 768px) and (max-width: 1023px)' });
+  const maxVisiblePages = isMobile ? 2 : isTablet ? 5 : 10;
 
   useEffect(() => {
     const getVisiblePages = () => {
@@ -26,7 +30,7 @@ const Pagination: FC<Props> = ({ currentPage, totalResults, onPageChange }) => {
     };
 
     setVisiblePages(getVisiblePages());
-  }, [currentPage, totalPages]);
+  }, [currentPage, totalPages, maxVisiblePages]);
 
   const handlePageClick = (pageNumber: number) => {
     onPageChange(pageNumber);
@@ -62,5 +66,4 @@ const Pagination: FC<Props> = ({ currentPage, totalResults, onPageChange }) => {
   );
 };
 
-
-export default Pagination
+export default Pagination;

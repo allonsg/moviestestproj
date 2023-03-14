@@ -3,13 +3,13 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from './store';
 import { searchMovies } from '@/services/api';
 import { HYDRATE } from 'next-redux-wrapper';
+import setLocal from '@/services/localStorage/setLocal';
 
 export const fetchMovies = createAsyncThunk<SearchResult, SearchParams>(
   'movies/fetchMovies',
   async (params) => {
     try {
       const result = await searchMovies({ searchQuery: params.searchQuery, page: params.page, type: params.type });
-      console.log({params, result})
       return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -45,19 +45,23 @@ const moviesSlice = createSlice({
   initialState,
   reducers: {
     setSearchQuery: (state, {payload}: PayloadAction<string>) => {
-       state.searchQuery = payload;
+      state.searchQuery = payload;
+      setLocal({ item: 'searchQuery', type: payload });
     },
     setType: (state, {payload}: PayloadAction<string>) => {
-       state.type = payload;
+      state.type = payload;
+      setLocal({ item: 'type', type: payload });
     },
     setResultCount: (state, {payload}: PayloadAction<number>) => {
-      state.resultCount = payload || state.resultCount;
+      state.resultCount = payload;
     },
     setCurrentPage: (state, {payload}: PayloadAction<number>) => {
-      state.currentPage = payload || state.currentPage;
+      state.currentPage = payload;
+      const page = payload.toString();
+      setLocal({ item: 'page', type: page });
     },
     setResults: (state, {payload}: PayloadAction<Movie[]>) => {
-      state.results = payload || state.results;
+      state.results = payload;
     },
   },
   extraReducers: (builder) => {

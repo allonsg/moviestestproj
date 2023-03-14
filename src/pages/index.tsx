@@ -1,7 +1,5 @@
 import { FC } from 'react';
 
-import styled from '@emotion/styled';
-
 import { fetchMovies, selectCurrentPage, selectCurrentType, selectMovies, selectResultCount, selectSearchQuery, setCurrentPage, setResultCount, setResults, setSearchQuery } from '@/redux/movieSlice';
 
 import MovieList from '@/components/MovieList';
@@ -14,20 +12,9 @@ import { searchMovies } from '@/services/api';
 import { randomMovie } from '@/services/randomMovie';
 import { wrapper } from '@/redux/store';
 import ErrorMessage from '@/components/ErrorMessage';
-
-const Container = styled.div`
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-
-  @media (min-width: 768px) {
-    padding: 20px;
-    max-width: 1450px;
-  }
-`;
+import setSearchParams from '@/services/localStorage/setSearchParams';
+import { MainPageConainer } from '@/components/PageContainer/indext';
+import { Heading } from '@/components/StyledHeading';
 
 interface Props {
   movies: Movie[];
@@ -42,25 +29,30 @@ const IndexPage: FC<Props> = ({ movies }) => {
   const currentPage = useAppSelector<number>(selectCurrentPage);
   const currentType = useAppSelector<string>(selectCurrentType);
   
-  const handleSearch = async (value: string, type?: string) => {
-     
-    dispatch(fetchMovies({ searchQuery: value, page: currentPage, type }));
+  const handleSearch = async (searchQuery: string, type: string, page: number) => {
+    dispatch(fetchMovies({ searchQuery, page, type }));
   };
+
   
   const handlePageChange = (pageNumber: number) => {
     dispatch(setCurrentPage(pageNumber));
     dispatch(fetchMovies({ searchQuery, page: pageNumber, type: currentType }));
   };
+
+  setSearchParams({ page: currentPage || '', type: currentType, searchQuery });
   
   const movieCondition = searchedMovies?.length > 0 ? searchedMovies : movies;
 
   return (
     <>
       <MainContainer title='Films | Home' keywords='films' description='simple service for films'>
-        <Container>
+        <Heading fontSize="3rem" fontWeight={700}>
+          Movies
+        </Heading>
+        <SearchBar onSearch={handleSearch} />
+        <MainPageConainer>
 
-          <SearchBar onSearch={handleSearch} />
-          {searchedMovies &&
+          {searchedMovies && searchedMovies.length> 0 &&
             <>
               <MovieList movies={movieCondition} />
               <Pagination
@@ -70,9 +62,8 @@ const IndexPage: FC<Props> = ({ movies }) => {
               />
             </>
           }
-
-          {!searchedMovies && <ErrorMessage/>}
-        </Container>
+          {(!searchedMovies || searchedMovies.length === 0 ) && <ErrorMessage />}
+        </MainPageConainer>
       </MainContainer>
     </>
   );
@@ -81,20 +72,64 @@ const IndexPage: FC<Props> = ({ movies }) => {
 let cachedMovie: string;
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async context => {
-  const someMovie = cachedMovie || randomMovie();
+  try {
+    const { cookies } = context.req;
+    const localQuery: string = cookies.searchQuery ?? '""';
+    const localPage: string = cookies.page ?? '""';
+    const localType: string = cookies.type ?? '""';
 
-  const {totalResults,Search} = await searchMovies({ searchQuery: someMovie, page: 1 });
-  
-  cachedMovie = someMovie;
-  store.dispatch(setResultCount(Number(totalResults)));
-  store.dispatch(setSearchQuery(someMovie));
-  store.dispatch(setResults(Search));
+    if (localQuery !== '""' && localPage !== '""') {
+    
+      const searchQuery = JSON.parse(localQuery);
+      const currentPage = Number(JSON.parse(localPage));
+      const selectedType = localType === '""' ? '' : JSON.parse(localType);
 
-  return {
-    props: {
-      movies: Search,
-    },
-  };
-});
+      const { totalResults, Search: movies } = await searchMovies({ searchQuery, page: currentPage, type: selectedType });
+
+      if (!movies) {
+        store.dispatch(setResults([]));
+
+        return {
+          props: { movies: [] },
+        };
+      }
+
+      store.dispatch(setResultCount(Number(totalResults)));
+      store.dispatch(setSearchQuery(searchQuery));
+      store.dispatch(setResults(movies));
+      store.dispatch(setCurrentPage(currentPage));
+
+      
+      return {
+        props: { movies },
+      };
+    }
+  } catch (error) {
+    console.error("An error occurred while fetching data from cookies:", error);
+  }
+
+
+  try {
+    const searchQuery = cachedMovie || randomMovie();
+    const { totalResults, Search: movies } = await searchMovies({ searchQuery, page: 1, type: '' });
+
+    cachedMovie = searchQuery;
+    store.dispatch(setResultCount(Number(totalResults)));
+    store.dispatch(setSearchQuery(searchQuery));
+    store.dispatch(setResults(movies));
+    store.dispatch(setCurrentPage(1));
+
+    return {
+      props: { movies },
+    };
+  } catch (error) {
+    console.error("An error occurred while fetching data from the API:", error);
+    return {
+      props: { movies: [] },
+    };
+  }
+})
+
+
 
 export default IndexPage;

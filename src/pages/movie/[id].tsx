@@ -1,21 +1,19 @@
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import Link from 'next/link';
 import { Movie } from '@/types/types';
 import MainContainer from '@/components/MainContainer';
 import MovieDetails from '@/components/MovieDetails';
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
 import { getMovieDetails } from '@/services/api';
 
 interface MoviePageProps {
-movie: Movie;
+  movie: Movie;
 }
 
 export const StyledMoviePage = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem;
 `;
 
 const MoviePage = ({ movie }: MoviePageProps) => {
@@ -29,12 +27,12 @@ const MoviePage = ({ movie }: MoviePageProps) => {
   );
 };
 
-export default MoviePage
+export default MoviePage;
 
-export const getServerSideProps: GetServerSideProps<MoviePageProps> = async ({query}): Promise<GetServerSidePropsResult<MoviePageProps>> => {
-  const { id } = query!;
-
+export const getServerSideProps: GetServerSideProps<MoviePageProps> = async ({ query }): Promise<GetServerSidePropsResult<MoviePageProps>> => {
   try {
+    const id = query?.id;
+
     if (typeof id !== 'string') {
       throw new Error('No movie ID provided.');
     }
@@ -47,12 +45,10 @@ export const getServerSideProps: GetServerSideProps<MoviePageProps> = async ({qu
       },
     };
 
-  } catch (error: unknown) {
+  } catch (error) {
     console.error(error);
     return {
       notFound: true,
     };
   }
 };
-
-
